@@ -12,18 +12,20 @@ public class TaskConfig {
 
     @Bean
     CommandLineRunner commandLineRunner(TaskRepository repository) {
+
+        Date date = new Date(0);
+
         return args -> {
+
             Task task1 = new Task(
-                     "Test1",
-                     false,
-                     new Date(2015_02_01)
-            );
+                    "Test1",
+                    false,
+                    date.valueOf("2023-05-10"));
 
             Task task2 = new Task(
-                     "Test2",
-                     false,
-                     new Date(2020-05-01)
-            );
+                    "Test2",
+                    false,
+                    date.valueOf("2023-12-24"));
 
             repository.saveAll(List.of(task1, task2));
 
