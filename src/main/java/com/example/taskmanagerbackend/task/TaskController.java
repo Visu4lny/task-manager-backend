@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,9 +32,14 @@ public class TaskController {
         return taskService.getTasks();
     }
 
+    @GetMapping(path = "/sorted")
+    public List<Task> getTasksSortedByPosition() {
+        return taskService.getTasksSortedByPosition();
+    }
+
     @PostMapping
-    public void addNewTask(@RequestBody Task task) {
-        taskService.addNewTask(task);
+    public Task addNewTask(@RequestBody Task task) {
+        return taskService.addNewTask(task);
     }
 
     @DeleteMapping(path = "{taskId}")
@@ -41,18 +48,23 @@ public class TaskController {
     }
 
     @PutMapping(path = "{taskId}")
-    public void renameTask(
-                        @PathVariable("taskId") Long taskId,
-                        @RequestParam(required = false) String value,
-                        @RequestParam(required = false) Date date
-                           ) {
-        taskService.updateTask(taskId, value, date);
+    public Task renameTask(
+            @PathVariable("taskId") Long taskId,
+            @RequestParam(required = false) String value,
+            @RequestParam(required = false) Date date) {
+        return taskService.updateTask(taskId, value, date);
     }
 
     @PutMapping(path = "/finished/{taskId}")
-    public void setFinished(@PathVariable("taskId") Long taskId,
-                            @RequestParam(required = true) boolean isFinished) {
-        taskService.setFinished(taskId, isFinished);
+    public Task setFinished(@PathVariable("taskId") Long taskId,
+            @RequestParam(required = true) boolean isFinished) {
+        return taskService.setFinished(taskId, isFinished);
+    }
+
+    @PutMapping(path = "/position/{taskId}")
+    public void setPosition(@PathVariable("taskId") Long taskId,
+            @RequestParam(required = true) int position) {
+        taskService.setPosition(taskId, position);
     }
 
 }

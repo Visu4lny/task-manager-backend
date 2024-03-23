@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -23,11 +24,23 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
-    public void addNewTask(Task task) {
-       taskRepository.save(task);
+    public List<Task> getTasksSortedByPosition() {
+        Sort sort = Sort.by(Sort.Direction.ASC, "position");
+
+        return taskRepository.findAll(sort);
+    }
+
+    public Task addNewTask(Task task) {
+        if (task == null) {
+            throw new IllegalArgumentException("task must not be null");
+        }
+        return taskRepository.save(task);
     }
 
     public void deleteTask(Long taskId) {
+        if (taskId == null) {
+            throw new IllegalArgumentException("taskId must not be null");
+        }
         boolean exists = taskRepository.existsById(taskId);
         if (!exists) {
             throw new IllegalStateException("Task with id " + taskId + " does not exists");
@@ -36,30 +49,53 @@ public class TaskService {
     }
 
     @Transactional
-    public void updateTask(Long taskId, String value, Date date) {
+    public Task updateTask(Long taskId, String value, Date date) {
+        if (taskId == null) {
+            throw new IllegalArgumentException("taskId must not be null");
+        }
         Task task = taskRepository.findById(taskId)
-            .orElseThrow(() -> new IllegalStateException("Task with id " + taskId + " does not exists"));
+                .orElseThrow(() -> new IllegalStateException("Task with id " + taskId + " does not exist"));
 
         if (value != null &&
-            !Objects.equals(task.getValue(), value)) {
+                !Objects.equals(task.getValue(), value)) {
             task.setValue(value);
         }
 
         if (date != null &&
-            !Objects.equals(task.getDate(), date)) {
+                !Objects.equals(task.getDate(), date)) {
             task.setDate(date);
         }
+
+        return task;
 
     }
 
     @Transactional
-    public void setFinished(Long taskId, boolean isFinished) {
+    public Task setFinished(Long taskId, boolean isFinished) {
+        if (taskId == null) {
+            throw new IllegalArgumentException("taskId must not be null");
+        }
         Task task = taskRepository.findById(taskId)
-            .orElseThrow(() -> new IllegalStateException("Task with id " + taskId + " does not exists"));
+                .orElseThrow(() -> new IllegalStateException("Task with id " + taskId + " does not exists"));
 
         if (!Objects.equals(task.isFinished(), isFinished)) {
             task.setFinished(isFinished);
         }
+
+        return task;
     }
 
- }
+    @Transactional
+    public void setPosition(Long taskId, int position) {
+        if (taskId == null) {
+            throw new IllegalArgumentException("taskId must not be null");
+        }
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new IllegalStateException("Task with id " + taskId + " does not exists"));
+
+        if (!Objects.equals(task.getPosition(), position)) {
+            task.setPosition(position);
+        }
+    }
+
+}
