@@ -21,8 +21,16 @@ public class KanbanItem {
     private long columnId;
     private String value;
     private Date date;
+    private int position;
 
     public KanbanItem() {
+    }
+
+    public KanbanItem(long columnId, String value, Date date, int position) {
+        this.columnId = columnId;
+        this.value = value;
+        this.date = date;
+        this.position = position;
     }
 
     public KanbanItem(long columnId, String value, Date date) {
@@ -62,6 +70,14 @@ public class KanbanItem {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     @Override
