@@ -10,25 +10,30 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class TaskConfig {
 
+    @SuppressWarnings("null")
     @Bean
     CommandLineRunner commandLineRunner(TaskRepository repository) {
-
-        Date date = new Date(0);
-
         return args -> {
 
             Task task1 = new Task(
                     "Test1",
                     false,
-                    date.valueOf("2023-05-10"));
+                    Date.valueOf("2023-05-10"),
+                    1);
 
             Task task2 = new Task(
                     "Test2",
                     false,
-                    date.valueOf("2023-12-24"));
+                    Date.valueOf("2023-12-24"),
+                    0);
 
-            repository.saveAll(List.of(task1, task2));
+            Task task3 = new Task(
+                    "Test3",
+                    false,
+                    Date.valueOf("2023-12-24"),
+                    2);
 
+            repository.saveAll(List.of(task1, task2, task3));
         };
     }
 }
