@@ -1,14 +1,13 @@
 package com.example.taskmanagerbackend.task;
 
-import java.sql.Date;
-import java.util.List;
-import java.util.Objects;
-
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import jakarta.transaction.Transactional;
+import java.sql.Date;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class TaskService {
@@ -86,7 +85,7 @@ public class TaskService {
     }
 
     @Transactional
-    public void setPosition(Long taskId, int position) {
+    public Task setPosition(Long taskId, int position) {
         if (taskId == null) {
             throw new IllegalArgumentException("taskId must not be null");
         }
@@ -96,6 +95,8 @@ public class TaskService {
         if (!Objects.equals(task.getPosition(), position)) {
             task.setPosition(position);
         }
+
+        return task;
     }
 
 }
